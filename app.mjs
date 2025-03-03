@@ -2,13 +2,11 @@ import fs from 'node:fs/promises';
 import express from 'express';
 import bodyParser from 'body-parser';
 
-// Load environment variables
 import './loadEnvironment.mjs';
 
 import authRoutes from './routes/auth.mjs';
 
 const app = express();
-
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
