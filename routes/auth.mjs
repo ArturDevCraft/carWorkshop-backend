@@ -7,7 +7,7 @@ import { get, add } from '../data/user.mjs';
 const router = express.Router();
 
 router.post('/signup', async (req, res, next) => {
-	const data = req.body;
+	const data = { role: 'customer', ...req.body };
 	let errors = {};
 
 	if (!isValidEmail(data.email)) {
@@ -30,7 +30,13 @@ router.post('/signup', async (req, res, next) => {
 		});
 	} else {
 		const added = await add(data);
-		res.status(201).json({ message: 'User created.', added });
+		if (added) {
+			res.status(201).json({ message: 'User created.', added });
+		} else {
+			res.status(422).json({
+				message: 'Something went wrong during saving data in database.',
+			});
+		}
 	}
 });
 
