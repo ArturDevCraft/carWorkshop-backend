@@ -1,8 +1,11 @@
 import fs from 'node:fs/promises';
-const express = require('express');
+import express from 'express';
 import bodyParser from 'body-parser';
 
-const authRoutes = require('./routes/auth');
+// Load environment variables
+import './loadEnvironment.mjs';
+
+import authRoutes from './routes/auth.mjs';
 
 const app = express();
 
@@ -22,7 +25,7 @@ app.use(authRoutes);
 
 // app.get('/login', (req, res) => {});
 
-app.post();
+// app.post();
 
 app.listen(port, () => {
 	console.log(`App listening on port ${port}`);

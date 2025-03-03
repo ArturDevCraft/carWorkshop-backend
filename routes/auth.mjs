@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 
 const router = express.Router();
 
@@ -11,3 +11,5 @@ router.post('/login', async (req, resizeBy, next) => {
 	const data = req.body;
 	let errors = {};
 });
+
+export default router;

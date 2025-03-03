@@ -5,11 +5,13 @@
 	"main": "app.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node app.js"
+		"start": "node app.mjs"
 	},
 	"author": "Artur Czerwiak",
 	"license": "ISC",
 	"dependencies": {
-		"express": "^4.21.2"
+		"dotenv": "^16.4.7",
+		"express": "^4.21.2",
+		"mongodb": "^6.14.0"
 	}
 }
