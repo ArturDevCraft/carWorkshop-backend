@@ -76,7 +76,7 @@ router.post('/login', async (req, res, next) => {
 			});
 		}
 		const token = createJSONToken(email);
-		res.json({ token });
+		res.status(201).json({ token });
 	} else {
 		return res.status(401).json({ message: 'Authentication failed.' });
 	}
