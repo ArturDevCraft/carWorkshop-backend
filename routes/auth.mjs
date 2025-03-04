@@ -23,13 +23,33 @@ router.post('/signup', async (req, res, next) => {
 		errors.password = 'Invalid password. Must be at least 6 characters long.';
 	}
 
+	if (!isValidText(data.name, 2)) {
+		errors.name = 'Invalid name. Must be at least 2 characters long.';
+	}
+
+	if (!isValidText(data.surname, 2)) {
+		errors.surname = 'Invalid surnaem. Must be at least 2 characters long.';
+	}
+
+	if (!isValidText(data.phone, 9)) {
+		errors.phone = 'Invalid phone number. Must be at least 9 numbers long.';
+	}
+
 	if (Object.keys(errors).length > 0) {
 		return res.status(422).json({
 			message: 'User signup failed due to validation errors.',
 			errors,
 		});
 	} else {
-		const added = await add(data);
+		
+		const added = await add({
+			email: data.email,
+			pasword: data.password,
+			name: data.name,
+			surname: data.surname,
+			phone: data.phone,
+			role: data.role,
+		});
 		if (added) {
 			res.status(201).json({ message: 'User created.', added });
 		} else {
