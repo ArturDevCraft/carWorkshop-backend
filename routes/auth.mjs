@@ -41,10 +41,9 @@ router.post('/signup', async (req, res, next) => {
 			errors,
 		});
 	} else {
-		
 		const added = await add({
 			email: data.email,
-			pasword: data.password,
+			password: data.password,
 			name: data.name,
 			surname: data.surname,
 			phone: data.phone,
