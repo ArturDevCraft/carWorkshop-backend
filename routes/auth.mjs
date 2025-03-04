@@ -3,6 +3,7 @@ import db from '../db/conn.mjs';
 
 import { isValidEmail, isValidText } from '../util/validation.mjs';
 import { get, add } from '../data/user.mjs';
+import { createJSONToken, isValidPassword } from '../util/auth.mjs';
 
 const router = express.Router();
 
@@ -60,14 +61,25 @@ router.post('/signup', async (req, res, next) => {
 });
 
 router.post('/login', async (req, res, next) => {
-	const data = req.body;
-	let errors = {};
-});
+	const email = req.body.email;
+	const password = req.body.password;
 
-router.get('/users', async (req, res) => {
-	const collection = db.collection('users');
-	const results = await collection.find({}).toArray();
-	res.send(results).status(200);
+	let user;
+	user = await get(email);
+
+	if (user) {
+		const pwIsValid = await isValidPassword(password, user.password);
+		if (!pwIsValid) {
+			return res.status(422).json({
+				message: 'Invalid credentials.',
+				errors: { credentials: 'Invalid email or password entered.' },
+			});
+		}
+		const token = createJSONToken(email);
+		res.json({ token });
+	} else {
+		return res.status(401).json({ message: 'Authentication failed.' });
+	}
 });
 
 export default router;
