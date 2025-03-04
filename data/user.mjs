@@ -1,5 +1,4 @@
 import { hash } from 'bcryptjs';
-import { v4 as generateId } from 'uuid';
 
 import db from '../db/conn.mjs';
 
@@ -19,7 +18,8 @@ export async function get(email) {
 
 export async function add(data) {
 	const collection = await db.collection('users');
-	const newDocument = data;
+	const hashedPass = await hash(data.password, 12);
+	const newDocument = { ...data, password: hashedPass };
 	const result = await collection.insertOne(newDocument);
 
 	return result;
