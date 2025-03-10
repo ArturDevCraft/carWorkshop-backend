@@ -3,7 +3,7 @@ import db from '../db/conn.mjs';
 
 import { isValidEmail, isValidText } from '../util/validation.mjs';
 import { get, add } from '../data/user.mjs';
-import { createJSONToken, isValidPassword } from '../util/auth.mjs';
+import { checkAuth, createJSONToken, isValidPassword } from '../util/auth.mjs';
 
 const router = express.Router();
 
@@ -75,11 +75,17 @@ router.post('/login', async (req, res, next) => {
 				errors: { credentials: 'Invalid email or password entered.' },
 			});
 		}
-		const token = createJSONToken(email);
+		const token = createJSONToken(email, user.role);
 		res.status(201).json({ token });
 	} else {
 		return res.status(401).json({ message: 'Authentication failed.' });
 	}
+});
+
+router.use(checkAuth);
+
+router.get('/user', async (req, res, next) => {
+	res.status(201).json({ loggedUserData: req.token });
 });
 
 export default router;

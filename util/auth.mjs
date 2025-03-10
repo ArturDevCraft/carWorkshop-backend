@@ -1,12 +1,13 @@
 import pkg from 'jsonwebtoken';
+import { NotAuthError } from './errors.mjs';
 const { sign, verify } = pkg;
 
 import { compare } from 'bcryptjs';
 
 const KEY = process.env.SECRET_KEY || '';
 
-export function createJSONToken(email) {
-	return sign({ email }, KEY, { expiresIn: '1h' });
+export function createJSONToken(email, role) {
+	return sign({ email, role }, KEY, { expiresIn: '1h' });
 }
 
 export function validateJSONToken(token) {

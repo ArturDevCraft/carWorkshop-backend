@@ -21,8 +21,6 @@ app.use((req, res, next) => {
 
 app.use(authRoutes);
 
-// app.get('/login', (req, res) => {});
-
 // app.post();
 
 app.listen(port, () => {
