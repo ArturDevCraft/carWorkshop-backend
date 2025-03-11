@@ -16,6 +16,20 @@ export async function get(email) {
 	}
 }
 
+export async function workshopUserExists() {
+	const collection = await db.collection('users');
+	const query = { role: 'workshop' };
+	const result = await collection.findOne(query);
+
+	if (!result) {
+		// res.send('Not found').status(404);
+		return false;
+	} else {
+		// res.send(result).status(200);
+		return true;
+	}
+}
+
 export async function add(data) {
 	const collection = await db.collection('users');
 	const hashedPass = await hash(data.password, 12);

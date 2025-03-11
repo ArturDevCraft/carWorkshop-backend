@@ -5,3 +5,7 @@ export function isValidText(value, minLength = 1) {
 export function isValidEmail(value) {
 	return value && value.includes('@') && value.includes('.');
 }
+
+export function isEqualToOtherValue(value, otherValue) {
+	return value === otherValue;
+}

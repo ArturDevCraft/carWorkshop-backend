@@ -1,14 +1,18 @@
 import express from 'express';
 import db from '../db/conn.mjs';
 
-import { isValidEmail, isValidText } from '../util/validation.mjs';
-import { get, add } from '../data/user.mjs';
+import {
+	isValidEmail,
+	isValidText,
+	isEqualToOtherValue,
+} from '../util/validation.mjs';
+import { get, add, workshopUserExists } from '../data/user.mjs';
 import { checkAuth, createJSONToken, isValidPassword } from '../util/auth.mjs';
 
 const router = express.Router();
 
 router.post('/signup', async (req, res, next) => {
-	const data = { role: 'customer', ...req.body };
+	const data = { ...req.body };
 	let errors = {};
 
 	if (!isValidEmail(data.email)) {
@@ -24,16 +28,20 @@ router.post('/signup', async (req, res, next) => {
 		errors.password = 'Invalid password. Must be at least 6 characters long.';
 	}
 
+	if (!isEqualToOtherValue(data.password, data.passwordConfirm)) {
+		errors.passwordConfirm =
+			'Invalid password confirmation. Passwords must be the same.';
+	}
+
 	if (!isValidText(data.name, 2)) {
 		errors.name = 'Invalid name. Must be at least 2 characters long.';
 	}
 
-	if (!isValidText(data.surname, 2)) {
-		errors.surname = 'Invalid surnaem. Must be at least 2 characters long.';
-	}
-
-	if (!isValidText(data.phone, 9)) {
-		errors.phone = 'Invalid phone number. Must be at least 9 numbers long.';
+	if (data.role === 'customer') {
+	} else if (data.role === 'workshop') {
+		workshopUserExists() ? errors.role="Workshop administrator is registered you could not register this role.":'';
+	} else {
+		errors.role = 'Invalid role.';
 	}
 
 	if (Object.keys(errors).length > 0) {
@@ -46,8 +54,6 @@ router.post('/signup', async (req, res, next) => {
 			email: data.email,
 			password: data.password,
 			name: data.name,
-			surname: data.surname,
-			phone: data.phone,
 			role: data.role,
 		});
 		if (added) {
