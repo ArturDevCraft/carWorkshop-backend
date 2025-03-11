@@ -1,5 +1,4 @@
 import pkg from 'jsonwebtoken';
-import { NotAuthError } from './errors.mjs';
 const { sign, verify } = pkg;
 
 import { compare } from 'bcryptjs';
@@ -24,13 +23,14 @@ export function checkAuth(req, res, next) {
 	}
 	if (!req.headers.authorization) {
 		console.log('NOT AUTH. AUTH HEADER MISSING.');
-		return next(new NotAuthError('Not authenticated.'));
+		return res.status(401).json({ message: 'NOT AUTH. AUTH HEADER MISSING.' });
 	}
 	const authFragments = req.headers.authorization.split(' ');
 
 	if (authFragments.length !== 2) {
 		console.log('NOT AUTH. AUTH HEADER INVALID.');
-		return next(new NotAuthError('Not authenticated.'));
+
+		return res.status(401).json({ message: 'NOT AUTH. AUTH HEADER INVALID' });
 	}
 	const authToken = authFragments[1];
 	try {
@@ -38,7 +38,7 @@ export function checkAuth(req, res, next) {
 		req.token = validatedToken;
 	} catch (error) {
 		console.log('NOT AUTH. TOKEN INVALID.');
-		return next(new NotAuthError('Not authenticated.'));
+		return res.status(401).json({ message: 'NOT AUTH. TOKEN INVALID.' });
 	}
 	next();
 }

@@ -85,7 +85,11 @@ router.post('/login', async (req, res, next) => {
 router.use(checkAuth);
 
 router.get('/user', async (req, res, next) => {
-	res.status(201).json({ loggedUserData: req.token });
+	try {
+		res.status(201).json({ loggedUserData: req.token });
+	} catch (error) {
+		next(error);
+	}
 });
 
 export default router;
