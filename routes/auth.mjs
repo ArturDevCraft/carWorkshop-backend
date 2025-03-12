@@ -39,7 +39,10 @@ router.post('/signup', async (req, res, next) => {
 
 	if (data.role === 'customer') {
 	} else if (data.role === 'workshop') {
-		workshopUserExists() ? errors.role="Workshop administrator is registered you could not register this role.":'';
+		(await workshopUserExists())
+			? (errors.role =
+					'Workshop administrator is registered you could not register this role.')
+			: '';
 	} else {
 		errors.role = 'Invalid role.';
 	}
