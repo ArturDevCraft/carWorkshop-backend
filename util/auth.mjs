@@ -5,8 +5,8 @@ import { compare } from 'bcryptjs';
 
 const KEY = process.env.SECRET_KEY || '';
 
-export function createJSONToken(email, role) {
-	return sign({ email, role }, KEY, { expiresIn: '1h' });
+export function createJSONToken(email, role, userId) {
+	return sign({ email, role, userId }, KEY, { expiresIn: '1h' });
 }
 
 export function validateJSONToken(token) {
@@ -35,7 +35,7 @@ export function checkAuth(req, res, next) {
 	const authToken = authFragments[1];
 	try {
 		const validatedToken = validateJSONToken(authToken);
-		req.token = validatedToken;
+		req.user = validatedToken;
 	} catch (error) {
 		console.log('NOT AUTH. TOKEN INVALID.');
 		return res.status(401).json({ message: 'NOT AUTH. TOKEN INVALID.' });

@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import './loadEnvironment.mjs';
 
 import authRoutes from './routes/auth.mjs';
+import workshopRoutes from './routes/workshop.mjs';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 });
 
 app.use(authRoutes);
+app.use(workshopRoutes);
 
 // app.post();
 
