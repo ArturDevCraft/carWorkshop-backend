@@ -18,7 +18,7 @@ router.post('/addcar', async (req, res, next) => {
 		errors.model = 'Invalid model. Must be at least 1 character long';
 	}
 	if (!isValidText(data.vin, 17)) {
-		errors.model = 'Invalid VIN. Must be 17 characters long';
+		errors.vin = 'Invalid VIN. Must be 17 characters long';
 	}
 
 	if (req.user.role !== 'customer') {
