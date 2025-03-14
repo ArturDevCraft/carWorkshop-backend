@@ -1,5 +1,4 @@
 import express from 'express';
-import db from '../db/conn.mjs';
 
 import {
 	isValidEmail,
@@ -84,7 +83,7 @@ router.post('/login', async (req, res, next) => {
 				errors: { credentials: 'Invalid email or password entered.' },
 			});
 		}
-		const token = createJSONToken(email, user.role);
+		const token = createJSONToken(email, user.role, user._id);
 		res.status(201).json({ token });
 	} else {
 		return res.status(401).json({ message: 'Authentication failed.' });
@@ -95,7 +94,7 @@ router.use(checkAuth);
 
 router.get('/user', async (req, res, next) => {
 	try {
-		res.status(201).json({ loggedUserData: req.token });
+		res.status(201).json({ loggedUserData: req.user });
 	} catch (error) {
 		next(error);
 	}
