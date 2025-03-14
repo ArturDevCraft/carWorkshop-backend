@@ -47,4 +47,15 @@ router.post('/addcar', async (req, res, next) => {
 	}
 });
 
+router.get('/getCars', async (req, res, next) => {
+	const data = await getCars(req.user.userId);
+	if (data) {
+		res.status(201).json({ data });
+	} else {
+		res.status(422).json({
+			message: 'Something went wrong during saving data in database.',
+		});
+	}
+});
+
 export default router;

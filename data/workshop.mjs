@@ -1,11 +1,9 @@
-import { hash } from 'bcryptjs';
-
 import db from '../db/conn.mjs';
 
 export async function getCars(userId) {
 	const collection = await db.collection('cars');
 	const query = { userId: userId };
-	const result = await collection.find(query);
+	const result = await collection.find(query).toArray();
 
 	if (!result) {
 		// res.send('Not found').status(404);
