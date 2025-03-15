@@ -1,4 +1,5 @@
 import db from '../db/conn.mjs';
+import { ObjectId } from 'mongodb';
 
 export async function getCars(userId) {
 	const collection = await db.collection('cars');
@@ -21,4 +22,13 @@ export async function addCar(data) {
 	const result = await collection.insertOne(newDocument);
 
 	return result;
+}
+
+export async function deleteCar(userId, carId) {
+	const collection = await db.collection('cars');
+	const query = { _id: new ObjectId(carId), userId: userId };
+	const result = await collection.deleteOne(query);
+
+	return result;
+
 }

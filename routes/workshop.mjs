@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { isValidText, isEqualToOtherValue } from '../util/validation.mjs';
-import { getCars, addCar } from '../data/workshop.mjs';
+import { getCars, addCar, deleteCar } from '../data/workshop.mjs';
 import { checkAuth } from '../util/auth.mjs';
 
 const router = express.Router();
@@ -54,6 +54,22 @@ router.get('/getCars', async (req, res, next) => {
 	} else {
 		res.status(422).json({
 			message: 'Something went wrong during saving data in database.',
+		});
+	}
+});
+
+router.delete('/deleteCar/:id', async (req, res, next) => {
+	const data = await deleteCar(req.user.userId, req.params.id);
+
+	if (data) {
+		data.deletedCount === 0
+			? res
+					.status(401)
+					.json({ message: "Can not delete this car it's unavailable " })
+			: res.status(201).json({ data });
+	} else {
+		res.status(422).json({
+			message: 'Something went wrong during deleting car from database.',
 		});
 	}
 });
