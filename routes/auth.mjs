@@ -5,8 +5,8 @@ import {
 	isValidText,
 	isEqualToOtherValue,
 } from '../util/validation.mjs';
-import { get, add, workshopUserExists } from '../data/user.mjs';
-import { checkAuth, createJSONToken, isValidPassword } from '../util/auth.mjs';
+import { userExists, add, workshopUserExists } from '../data/user.mjs';
+import { createJSONToken, isValidPassword } from '../util/auth.mjs';
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.post('/signup', async (req, res, next) => {
 	if (!isValidEmail(data.email)) {
 		errors.email = 'Invalid email.';
 	} else {
-		const existingUser = await get(data.email);
+		const existingUser = await userExists(data.email);
 		if (existingUser) {
 			errors.email = 'Email alredy exists.';
 		}
@@ -73,7 +73,7 @@ router.post('/login', async (req, res, next) => {
 	const password = req.body.password;
 
 	let user;
-	user = await get(email);
+	user = await userExists(email);
 
 	if (user) {
 		const pwIsValid = await isValidPassword(password, user.password);
@@ -87,16 +87,6 @@ router.post('/login', async (req, res, next) => {
 		res.status(201).json({ token });
 	} else {
 		return res.status(401).json({ message: 'Authentication failed.' });
-	}
-});
-
-router.use(checkAuth);
-
-router.get('/user', async (req, res, next) => {
-	try {
-		res.status(201).json({ loggedUserData: req.user });
-	} catch (error) {
-		next(error);
 	}
 });
 

@@ -21,10 +21,12 @@ export function checkAuth(req, res, next) {
 	if (req.method === 'OPTIONS') {
 		return next();
 	}
+
 	if (!req.headers.authorization) {
 		console.log('NOT AUTH. AUTH HEADER MISSING.');
 		return res.status(401).json({ message: 'NOT AUTH. AUTH HEADER MISSING.' });
 	}
+
 	const authFragments = req.headers.authorization.split(' ');
 
 	if (authFragments.length !== 2) {

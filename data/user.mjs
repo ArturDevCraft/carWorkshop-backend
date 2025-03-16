@@ -1,8 +1,23 @@
 import { hash } from 'bcryptjs';
 
 import db from '../db/conn.mjs';
+import { ObjectId } from 'mongodb';
 
-export async function get(email) {
+export async function get(id) {
+	const collection = await db.collection('users');
+	const query = { _id: new ObjectId(id) };
+	const result = await collection.findOne(query);
+
+	if (!result) {
+		// res.send('Not found').status(404);
+		return false;
+	} else {
+		// res.send(result).status(200);
+		return result;
+	}
+}
+
+export async function userExists(email) {
 	const collection = await db.collection('users');
 	const query = { email: email };
 	const result = await collection.findOne(query);
