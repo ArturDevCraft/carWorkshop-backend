@@ -24,11 +24,20 @@ export async function addCar(data) {
 	return result;
 }
 
+export async function updateCar(data) {
+	const collection = await db.collection('cars');
+
+	const query = { _id: new ObjectId(data.carId), userId: data.userId };
+	const updates = { make: data.make, model: data.model, vin: data.vin };
+	const result = await collection.updateOne(query, updates);
+
+	return result;
+}
+
 export async function deleteCar(userId, carId) {
 	const collection = await db.collection('cars');
 	const query = { _id: new ObjectId(carId), userId: userId };
 	const result = await collection.deleteOne(query);
 
 	return result;
-
 }
