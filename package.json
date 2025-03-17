@@ -1,11 +1,12 @@
 {
 	"name": "car-workshop-booking-backend",
 	"version": "1.0.0",
+	"type": "module",
 	"description": "Backend application for booking car workshop",
-	"main": "app.js",
+	"main": "index.mjs",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node app.mjs"
+		"start": "node api/index.mjs"
 	},
 	"author": "Artur Czerwiak",
 	"license": "ISC",
@@ -14,6 +15,7 @@
 		"dotenv": "^16.4.7",
 		"express": "^4.21.2",
 		"jsonwebtoken": "^9.0.2",
-		"mongodb": "^6.14.0"
+		"mongodb": "^6.3.0",
+		"whatwg-url": "^13.0.0"
 	}
 }

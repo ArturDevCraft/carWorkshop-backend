@@ -21,6 +21,9 @@ app.use((req, res, next) => {
 	next();
 });
 
+app.get('/', function (req, res) {
+	res.status(201).json({ message: 'OK' });
+});
 app.use(authRoutes);
 app.use(workshopRoutes);
 app.use(userRoutes);
@@ -30,3 +33,5 @@ app.use(userRoutes);
 app.listen(port, () => {
 	console.log(`App listening on port ${port}`);
 });
+
+export default app;
