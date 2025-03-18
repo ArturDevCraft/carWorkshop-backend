@@ -61,7 +61,7 @@ router.post('/signup', async (req, res, next) => {
 		if (added) {
 			res.status(201).json({ message: 'User created.', added });
 		} else {
-			res.status(422).json({
+			res.status(500).json({
 				message: 'Something went wrong during saving data in database.',
 			});
 		}
@@ -80,13 +80,16 @@ router.post('/login', async (req, res, next) => {
 		if (!pwIsValid) {
 			return res.status(422).json({
 				message: 'Invalid credentials.',
-				errors: { credentials: 'Invalid email or password entered.' },
+				errors: { password: 'Invalid password entered.' },
 			});
 		}
 		const token = createJSONToken(email, user.role, user._id);
 		res.status(201).json({ token });
 	} else {
-		return res.status(401).json({ message: 'Authentication failed.' });
+		return res.status(401).json({
+			message: 'Authentication failed.',
+			errors: { email: "User doesn't exist." },
+		});
 	}
 });
 
