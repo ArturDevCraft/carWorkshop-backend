@@ -36,6 +36,7 @@ router.post('/addcar', async (req, res, next) => {
 			make: data.make,
 			model: data.model,
 			vin: data.vin,
+			imageUrl: data.imageUrl,
 		});
 		if (added) {
 			res.status(201).json({ message: 'Car added.', added });
