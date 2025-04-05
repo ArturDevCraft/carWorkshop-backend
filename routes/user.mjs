@@ -73,14 +73,14 @@ router.put('/updateuser', async (req, res, next) => {
 			errors,
 		});
 	} else {
-		const added = await updateUser({
+		const updated = await updateUser({
 			userId: req.user.userId,
 			name: data.name,
 			email: data.email,
 			password: data.newPassword,
 		});
-		if (added) {
-			res.status(201).json({ message: 'Car added.', added });
+		if (updated) {
+			res.status(201).json({ message: 'User updated corectly.', updated });
 		} else {
 			res.status(422).json({
 				message: 'Something went wrong during saving data in database.',
