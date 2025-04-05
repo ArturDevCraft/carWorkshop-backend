@@ -53,3 +53,22 @@ export async function add(data) {
 
 	return result;
 }
+
+export async function updateUser(data) {
+	const collection = await db.collection('users');
+	const query = { _id: new ObjectId(data.userId) };
+
+	let updates = {
+		$set: { name: data.name, email: data.email },
+	};
+
+	if (data.password) {
+		const hashedPass = await hash(data.password, 12);
+		updates = {
+			$set: { name: data.name, email: data.email, password: hashedPass },
+		};
+	}
+	const result = await collection.updateOne(query, updates);
+
+	return result;
+}
