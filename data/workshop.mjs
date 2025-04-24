@@ -24,6 +24,15 @@ export async function addCar(data) {
 	return result;
 }
 
+export async function addRepair(data) {
+	const collection = await db.collection('repairs');
+
+	const newDocument = { ...data };
+	const result = await collection.insertOne(newDocument);
+
+	return result;
+}
+
 export async function updateCar(data) {
 	const collection = await db.collection('cars');
 

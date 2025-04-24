@@ -1,7 +1,13 @@
 import express from 'express';
 
 import { isValidText, isEqualToOtherValue } from '../util/validation.mjs';
-import { getCars, addCar, deleteCar, updateCar } from '../data/workshop.mjs';
+import {
+	getCars,
+	addCar,
+	deleteCar,
+	updateCar,
+	addRepair,
+} from '../data/workshop.mjs';
 import { checkAuth } from '../util/auth.mjs';
 
 const router = express.Router();
@@ -113,6 +119,39 @@ router.delete('/deleteCar/:id', async (req, res, next) => {
 		res.status(422).json({
 			message: 'Something went wrong during deleting car from database.',
 		});
+	}
+});
+
+router.post('/addrepair', async (req, res, next) => {
+	const data = { ...req.body };
+	let errors = {};
+
+	if (!isValidText(data.carId, 1)) {
+		errors.carId = 'Invalid car.';
+	}
+	if (!isValidText(data.description, 1)) {
+		errors.description = 'Invalid model. Must be at least 1 character long';
+	}
+
+	if (Object.keys(errors).length > 0) {
+		return res.status(422).json({
+			message: 'Repair adding failed due to validation errors.',
+			errors,
+		});
+	} else {
+		const added = await addRepair({
+			userId: req.user.userId,
+			carId: data.carId,
+			description: data.description,
+			information: data.information,
+		});
+		if (added) {
+			res.status(201).json({ message: 'Repair added.', added });
+		} else {
+			res.status(422).json({
+				message: 'Something went wrong during saving data in database.',
+			});
+		}
 	}
 });
 
